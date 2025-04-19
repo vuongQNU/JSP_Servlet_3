@@ -32,4 +32,24 @@ public class ProvinceDAO {
         }
         return provinces;
     }
+ // Thêm phương thức findById
+    public Province findById(int id) {
+        Province province = null;
+        String sql = "SELECT * FROM provinces WHERE idProvince = ?";
+        try (Connection conn = databaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    province = new Province();
+                    province.setIdProvince(rs.getInt("idProvince"));
+                    province.setNameProvince(rs.getString("nameProvince"));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy thông tin tỉnh/thành: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return province;
+    }
 }
